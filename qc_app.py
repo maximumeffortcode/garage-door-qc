@@ -67,7 +67,12 @@ def generate_pdf(filepath, form_data, qc_items, notes, photos):
     c.drawString(50, y, "QC Checklist:")
     y -= 20
     for item, checked in qc_items.items():
-        status = "✅" if checked else "❌"
+        if checked:
+                c.setFillColorRGB(0, 0.6, 0)
+                status = "✅"
+        else:
+            c.setFillColorRGB(1, 0, 0)
+            status = "❌"
         c.drawString(70, y, f"{status} {item}")
         y -= 15
 
@@ -115,7 +120,8 @@ def send_email_with_attachment(recipient_email, subject, body, attachment_path):
         FileType("application/pdf"),
         Disposition("attachment")
     )
-
+    recipient_email = [email.strip() for email in st.secrets["sendgrid"]["to_emails"].split(",")]
+    
     message = Mail(
         from_email=st.secrets["sendgrid"]["from_email"],
         to_emails=recipient_email,
