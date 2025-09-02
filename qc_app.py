@@ -120,7 +120,6 @@ def send_email_with_attachment(recipient_email, subject, body, attachment_path):
         FileType("application/pdf"),
         Disposition("attachment")
     )
-    recipient_email = [email.strip() for email in st.secrets["sendgrid"]["to_emails"].split(",")]
     
     message = Mail(
         from_email=st.secrets["sendgrid"]["from_email"],
@@ -160,7 +159,7 @@ if submitted:
                 generate_pdf(pdf_path, form_data, qc_items, notes, photos)
 
             send_email_with_attachment(
-                recipient_email=st.secrets["sendgrid"]["to_email"],
+                recipient_email = [email.strip() for email in st.secrets["sendgrid"]["to_emails"].split(",")],
                 subject = f"QC Report - {project} Lot {lot_number}",
                 body="Attached is the completed Garage Door QC Report.",
                 attachment_path=pdf_path
