@@ -3,6 +3,7 @@ from datetime import date
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
+from reportlab.lib import colors 
 import tempfile
 import os
 import io
@@ -75,6 +76,8 @@ def generate_pdf(filepath, form_data, qc_items, notes, photos):
             status = "❌"
         c.drawString(70, y, f"{status} {item}")
         y -= 15
+
+    c.setFillColor(colors.black)
 
     c.drawString(50, y, "Notes:")
     y -= 20
