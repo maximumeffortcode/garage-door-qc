@@ -68,6 +68,8 @@ def generate_pdf(filepath, form_data, qc_items, notes, photos):
     c.drawString(50, y, "QC Checklist:")
     y -= 20
     for item, checked in qc_items.items():
+        if not item.strip():
+            continue
         if checked:
                 c.setFillColorRGB(0, 0.6, 0)
                 status = "✅"
