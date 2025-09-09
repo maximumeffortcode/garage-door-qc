@@ -11,6 +11,9 @@ from PIL import Image
 import base64
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Attachment, FileContent, FileName, FileType, Disposition
+from qc_db import create_qc_log_table, sync_qc_to_forecast
+
+create_qc_log_table()
 
 st.set_page_config(page_title="Garage Door QC App", layout="centered")
 st.title("Garage Door QC Form")
@@ -169,6 +172,13 @@ if submitted:
                 body="Attached is the completed Garage Door QC Report.",
                 attachment_path=pdf_path
             )
+            try:
+                sync_qc_to_forecast(project, builder, lot_number, install_date)
+                st.success("✅ Install date synced to forecasting database")
+            except Exception as e:
+                st.warning(f"⚠️ Could not sync install date to forecasting DB: {e}")
+
+                
 
             os.remove(pdf_path)
 
